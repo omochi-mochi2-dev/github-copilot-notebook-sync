@@ -1,0 +1,20 @@
+sync_targets:
+  - repository: "github/docs"
+    watch_folders:
+      # Doc 1: Concepts & Getting Started (実測 85 件 / ヘッドルーム 15 件)
+      - source_path: "content/copilot/get-started"
+        google_doc_id: "1AMOPbDQnIoJiKbhDc-7Qt4zQMqyqkHj9VyiDAs1LbQg"
+        doc_name: "[Copilot Docs] 01 - Concepts & Getting Started"
+      - source_path: "content/copilot/concepts"
+        google_doc_id: "1AMOPbDQnIoJiKbhDc-7Qt4zQMqyqkHj9VyiDAs1LbQg"
+        doc_name: "[Copilot Docs] 01 - Concepts & Getting Started"
+      - source_path: "content/copilot/responsible-use"
+        google_doc_id: "1AMOPbDQnIoJiKbhDc-7Qt4zQMqyqkHj9VyiDAs1LbQg"
+        doc_name: "[Copilot Docs] 01 - Concepts & Getting Started"
+      - source_path: "content/copilot/copilot-on-ghes"
+        google_doc_id: "1AMOPbDQnIoJiKbhDc-7Qt4zQMqyqkHj9VyiDAs1LbQg"
+        doc_name: "[Copilot Docs] 01 - Concepts & Getting Started"
+      # --- 今後順次追加予定 (8分冊構成) ---
+      # - source_path: "content/copilot/how-tos/copilot-cli"
+      #   google_doc_id: "YOUR_DOC_2_GOOGLE_DOC_ID"
+      #   doc_name: "[Copilot Docs] 02 - CLI & Terminal Workflows"
