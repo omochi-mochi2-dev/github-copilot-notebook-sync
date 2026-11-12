@@ -1,0 +1,7 @@
+prodname_dotcom: GitHub
+prodname_ghe_server: GitHub Enterprise Server
+prodname_copilot: GitHub Copilot
+prodname_vscode: Visual Studio Code
+company_short: GitHub
+product_url: '{% ifversion ghes %}HOSTNAME{% else %}github.com{% endif %}'
+

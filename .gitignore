@@ -219,3 +219,8 @@ __marimo__/
 
 # Google Cloud Credentials
 credentials.json
+
+# Sync engine local state / outputs
+last_commit_sha_*.txt
+out/
+
