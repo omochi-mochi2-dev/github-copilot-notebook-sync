@@ -45,7 +45,7 @@ By partitioning extensive documentation into topic-driven volumes, this system a
 ├── .agents/
 │   ├── AGENTS.md                  # Master context, rules, and guardrails for AI agents
 │   ├── rules/
-│   │   └── coding_rules.md        # Python coding standards and conventions
+│   │   └── coding-rules.md        # Python coding standards and conventions
 │   └── skills/
 │       ├── docs_tabs_logic.md     # Google Docs API tabs and transaction specs
 │       └── github_sync_logic.md   # GitHub diff retrieval & Liquid resolution specs

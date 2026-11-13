@@ -1,3 +1,9 @@
+---
+trigger: glob
+globs: "src/**/*.py, tests/**/*.py"
+description: "Python 実装およびテストコード作成時のコーディング規約（型ヒント・データクラス・エラー処理）"
+---
+
 # Rules: Python Coding Standards for Sync System
 
 ## 概要

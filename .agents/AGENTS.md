@@ -55,7 +55,7 @@ Google Docs API はドキュメント内に最低 1 つのタブが存在する�
 ├── .agents/
 │   ├── AGENTS.md                  # 本ファイル
 │   ├── rules/
-│   │   └── coding_rules.md        # Python コーディング規約
+│   │   └── coding-rules.md        # Python コーディング規約
 │   └── skills/
 │       ├── docs-tabs-logic/
 │       │   └── SKILL.md           # Google Docs API タブ操作・Phase 1/Phase 2 同期仕様
