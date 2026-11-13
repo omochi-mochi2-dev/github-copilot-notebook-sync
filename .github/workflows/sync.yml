@@ -1,0 +1,102 @@
+name: Sync GitHub Copilot Docs to Google Docs
+
+on:
+  schedule:
+    # 毎日 UTC 0:00（日本時間 9:00）に自動実行
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "全量強制同期（--force）を実行する"
+        required: false
+        type: boolean
+        default: false
+      doc_id:
+        description: "特定の Google Doc ID のみ同期する場合に指定（空欄で全対象）"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Restore commit SHA cache
+        id: cache-sha
+        uses: actions/cache@v4
+        with:
+          path: last_commit_sha_*.txt
+          key: commit-sha-${{ github.run_id }}
+          restore-keys: |
+            commit-sha-
+
+      - name: Write Google Cloud credentials
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          if [ -z "$GCP_SA_KEY" ]; then
+            echo "::error::Secret GCP_SA_KEY is not set."
+            exit 1
+          fi
+          printf '%s' "$GCP_SA_KEY" > credentials.json
+
+      - name: Run sync pipeline
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          if [ -n "${{ inputs.doc_id }}" ]; then
+            ARGS="$ARGS --doc-id ${{ inputs.doc_id }}"
+          fi
+          python src/main.py $ARGS
+
+      - name: Remove credentials file
+        if: always()
+        run: rm -f credentials.json
+
+      - name: Create alert issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const dateStr = new Date().toISOString().slice(0, 10);
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Alert] Copilot Docs Sync Failed (${dateStr})`,
+              body: [
+                '## 同期処理エラー通知',
+                '',
+                'GitHub Copilot ドキュメントの自動同期ワークフローが異常終了しました。',
+                '安全ガード（100タブ上限超過・全削除防止）の発動、または API 通信エラーの可能性があります。',
+                '',
+                `- **実行ログ**: ${runUrl}`,
+                `- **トリガー**: \`${context.eventName}\``,
+                '',
+                '※ コミット SHA キャッシュは更新されていないため、原因解消後の次回実行時に差分は取りこぼしなく再処理されます。'
+              ].join('\n')
+            });
