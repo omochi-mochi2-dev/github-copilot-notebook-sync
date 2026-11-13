@@ -16,8 +16,8 @@ sync_targets:
         doc_name: "[Copilot Docs] 01 - Concepts & Getting Started"
       # Doc 2: CLI & Terminal Workflows (実測 45 件 / ヘッドルーム 55 件)
       - source_path: "content/copilot/how-tos/copilot-cli"
-        google_doc_id: "YOUR_DOC_2_GOOGLE_D   OC_ID"
-        doc_name: "[Copilot Docs] 02 - CLI & Terminal Wor   flows"
+        google_doc_id: "1-F0Truw0gwRmsC9S3Budxt_PNqsOcm-bq2dUhnXjd1w"
+        doc_name: "[Copilot Docs] 02 - CLI & Terminal Workflows"
       - source_path: "content/copilot/how-tos/github-agentic-workflows"
-        google_doc_id: "YOUR_DOC_2_GOOGLE_DOC_ID"
+        google_doc_id: "1-F0Truw0gwRmsC9S3Budxt_PNqsOcm-bq2dUhnXjd1w"
         doc_name: "[Copilot Docs] 02 - CLI & Terminal Workflows"
