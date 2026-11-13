@@ -91,8 +91,8 @@ Google Docs API では新規作成される `tabId` が動的に発行される�
 
 | 分冊番号 | ドキュメント名（役割） | 対象ディレクトリパス | 有効ファイル数 | ヘッドルーム（余裕） |
 | :--- | :--- | :--- | :--- | :--- |
-| **Doc 1** | **Concepts & Getting Started**（第1フェーズ対象） | `get-started/`, `concepts/`, `responsible-use/`, `copilot-on-ghes/` | 85 件 | 15 件 |
-| **Doc 2** | **CLI & Terminal Workflows** | `how-tos/copilot-cli/`, `how-tos/github-agentic-workflows/` | 45 件 | 55 件 |
+| **Doc 1** | **Concepts & Getting Started**（稼働中） | `get-started/`, `concepts/`, `responsible-use/`, `copilot-on-ghes/` | 85 件 | 15 件 |
+| **Doc 2** | **CLI & Terminal Workflows**（稼働中） | `how-tos/copilot-cli/`, `how-tos/github-agentic-workflows/` | 45 件 | 55 件 |
 | **Doc 3** | **Surfaces & Interactive Coding** | `how-tos/copilot-in-your-ide/`, `how-tos/copilot-on-github/`, `how-tos/github-copilot-app/` | 74 件 | 26 件 |
 | **Doc 4** | **Autonomous Agents & SDK** | `how-tos/copilot-sdk/`, `how-tos/use-copilot-agents/`, `how-tos/copilot-integrations/` | 67 件 | 33 件 |
 | **Doc 5** | **Enterprise Administration & Security** | `how-tos/administer-copilot/`, `how-tos/cloud-and-local-sandboxes/`, `how-tos/configure-content-exclusion/`, `how-tos/manage-and-track-spending/`, `how-tos/manage-your-account/`, `how-tos/troubleshoot-copilot/` | 61 件 | 39 件 |
