@@ -109,6 +109,14 @@ def is_under_watch_folder(file_path: str, watch_folder: str) -> bool:
 
 ```
 
+### ③ 全量同期への自動フォールバック条件
+
+通常の差分同期（Compare API）実行時であっても、以下のいずれかに該当する場合は差分の取りこぼしやスニペット・変数更新の未反映を防ぐため、自動的に全量同期モード（`effective_force = True`）へ切り替える。
+
+- **Compare API の 300 ファイル上限到達**: `files` 配列が 300 件に達し、差分が切り詰められた（`truncated`）可能性がある場合。
+- **`data/` 配下の変更検知**: コミット差分に `data/reusables/` または `data/variables/` 配下のファイル変更が含まれており、Markdown ファイル自体に変更がなくても解決後の本文が変化し得る場合。
+- **監視フォルダのサブツリー取得**: 全量同期時は `github/docs` ルートツリーの `truncated` を回避するため、監視フォルダのツリー SHA を特定したうえでサブツリーのみを `git/trees/{sha}?recursive=1` で取得する。監視フォルダ自体が取得できない場合は、全タブの孤立判定事故を防ぐため即座に例外で停止する。
+
 ---
 
 ## 3. パス平坦化とタブ命名アルゴリズム（Tab Naming Strategy）
@@ -161,11 +169,17 @@ Clean & Flattened Markdown (Google Docs API へ送信)
 
 ```
 
+### ⓪ 前処理: Frontmatter 整形 & `{% raw %}` ブロック保護
+
+- **Frontmatter 整形**: YAML Frontmatter から `title` と `intro` のみを抽出し、本文先頭に `# {title}\n\n{intro}` として配置したうえで残りのメタデータ（`versions`, `redirect_from` 等）を除去する。
+- **`{% raw %}...{% endraw %}` の退避と復元**: GitHub Actions ワークフロー例（`${{ github.sha }}` 等）やテンプレート例示を破壊しないよう、Phase A 実行前にプレースホルダーへ退避し、全段階完了後にそのまま復元する。
+
 ### ① Phase A: Reusables 展開仕様
 
-`{% data reusables.* %}` を検知し、リポジトリの `data/reusables/` 配下の実 Markdown ファイル本文で再帰置換する。
+`{% data reusables.* %}`（空白制御記法 `{%- ... -%}` および `indented_data_reference` を含む）を検知し、リポジトリの `data/reusables/` 配下の実 Markdown ファイル本文で再帰置換する。
 
-- **構文パターン**: `r'\{%\s*data\s+reusables\.([^\s%]+)\s*%\}'`
+- **コメントブロックの先行除去**: コメントアウトされた無効な参照を無駄に取得しないよう、展開前に `{% comment %}[\s\S]*?{% endcomment %}` を先行除去する。
+- **構文パターン**: `r'\{%-?\s*data\s+reusables\.([^\s%]+)\s*-?%\}'`
 - **ファイル解決規則**: `reusables.copilot.mcp.about-github-mcp-server` ➔ `data/reusables/copilot/mcp/about-github-mcp-server.md`
 - **再帰展開制限**: スニペット内に別のスニペットが含まれるケースに対応するため、最大 **3 階層** まで展開する。循環参照は即座にエラーとする。
 
@@ -181,18 +195,19 @@ Web 表示用の分岐やタブUIタグを、Gemini Notebook が理解しやす�
 | `{% vscode %}` / `{% jetbrains %}` / `{% visualstudio %}` 等 | `\n\n#### <ツール名>\n\n`  | IDE 別手順を見出し化して全手順を保持   |
 | `{% endvscode %}` 等                                         | `\n`                       | 終端改行                               |
 | `{% ifversion ... %}` / `{% endif %}` / `{% else %}`         | 空文字（除去）             | バージョン差異によらず全知識を学習     |
-| `{% rowheaders %}` / `{% endrowheaders %}`                   | 空文字（除去）             | 表装飾タグの平坦化                     |
+| `{% rowheaders %}` / `{% endrowheaders %}` / `{% prompt %}` 等 | 空文字（タグのみ除去）   | 表装飾・プロンプト装飾タグの平坦化     |
 | `{% octicon "check" %}`                                      | `✓`                        | 記号への置き換え                       |
 | `{% octicon "<その他>" %}`                                   | 空文字（除去）             | 装飾アイコンのノイズ除去               |
 | `{% comment %}[\s\S]*?{% endcomment %}`                      | 空文字（ブロックごと除去） | コメントアウトの消去                   |
 
 ### ③ Phase C: Variables 辞書置換仕様
 
-実測調査に基づき、すべての変数が完全な 2 階層（`data variables.<ファイル名>.<キー>`）であることを利用して置換する。
+実測調査に基づき、すべての変数が 2 階層（`data variables.<ファイル名>.<キー>`）であることを利用して置換する。
 
-- **構文パターン**: `r'\{%\s*data\s+variables\.([\w-]+)\.([\w-]+)\s*%\}'`
+- **構文パターン**: `r'\{%-?\s*data\s+variables\.([\w-]+)\.([\w.-]+)\s*-?%\}'`（バージョン番号 `3.8` などドットを含む YAML キー名にも対応）
 - **データソース**: `data/variables/*.yml`（`product.yml`, `copilot.yml`, `release-phases.yml` など）
-- **データ構造**: 各 YAML は単純なフラット辞書（`Dict[str, str]`）としてキャッシュロード。
+- **データ構造**: 各 YAML は単純なフラット辞書（`Dict[str, str]`）としてコミット SHA 単位でキャッシュロード。
+- **変数値内 Liquid の再帰解決**: 変数の値自体に `{% ifversion %}` 分岐や他変数への参照が含まれる場合があるため、変数値に対しても Phase B の平坦化および最大 **3 階層** までの変数再帰置換を適用する。
 - **フォールバック**: 未定義キーの場合は、タグを除去してキー名自体をそのまま残す（例: `prodname_copilot`）。
 
 ---
@@ -203,7 +218,7 @@ Google Docs API の仕様上、新規タブ作成（`addDocumentTab`）とテキ
 
 ### ① Phase 1: 構造同期（Structure Sync）
 
-1. 対象 Google ドキュメントの最新状態を `documents.get(includeTabsContent=False)` で取得。
+1. 対象 Google ドキュメントの最新状態を `documents.get(includeTabsContent=True)` で取得する（※ Google Docs API の仕様上、`includeTabsContent=False` では `tabs` フィールドが空となり既存タブ一覧を取得できないため、Phase 1 前の取得から必ず `includeTabsContent=True` を指定する）。
 2. 既存タブ一覧と、今回の GitHub 差分・同期対象一覧を照合。
 3. **100 タブ All-or-Nothing フェイルセーフ判定**:
 
