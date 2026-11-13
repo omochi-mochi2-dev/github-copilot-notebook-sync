@@ -1,9 +1,9 @@
 ---
 name: maintain-project-docs
 description: >
-  src/、config.yaml、または .github/workflows/ のコード・設定を変更したタスクの完了時に使用。
-  仕様変更の有無を判定し、docs/、.agents/、README.md の更新が必要か判断して、
-  必要な場合のみ最小限の差分で同期更新する。
+  src/、config.yaml、または .github/workflows/ のファイルを編集した直後、
+  完了報告や git commit を行う前に必ず使用する。
+  仕様変更の有無を判定し、docs/、.agents/、README.md の同期更新およびコミットを判断する。
 ---
 
 # Project Documentation & Agent Skill Maintenance
@@ -14,15 +14,15 @@ description: >
 
 変更内容を以下の基準と照合し、1つでも「要更新」に該当する場合のみ対象ファイルを更新する。すべて「更新不要」に該当する場合は、ドキュメント類には一切手を加えない。
 
-| 変更の種類                                                                                                           | 判定         | 更新対象ファイル                                                                                     |
-| :------------------------------------------------------------------------------------------------------------------- | :----------- | :--------------------------------------------------------------------------------------------------- |
-| **データモデル・アルゴリズム・正規表現の変更**<br>（`models.py`, `liquid_resolver.py`, `path_utils.py` 等）          | **要更新**   | `docs/Detailed_Logic.md`<br>`.agents/skills/github-sync-logic/SKILL.md`                              |
-| **API 制限・フェイルセーフ・トランザクション規約の変更**<br>（`docs_client.py`, `github_client.py` 等）              | **要更新**   | `docs/Detailed_Logic.md`<br>`docs/System_Overview.md`<br>`.agents/skills/docs-tabs-logic/SKILL.md`   |
-| **CLI オプション・実行方法・環境変数・依存関係の変更**<br>（`main.py`, `requirements.txt`, `.github/workflows/` 等） | **要更新**   | `README.md`<br>`docs/System_Overview.md`                                                     |
-| **ディレクトリ構成の追加・削除・変更**                                                                               | **要更新**   | `.agents/AGENTS.md`<br>`README.md`                                                           |
-| **分冊（Doc 2〜8）の有効化・監視パス変更**<br>（`config.yaml` の更新）                                               | **要更新**   | `docs/System_Overview.md`<br>`README.md`                                                     |
-| **既存仕様どおりのバグ修正・内部リファクタリング**                                                                   | **更新不要** | なし                                                                                         |
-| **テストコード（`tests/`）のみの追加・修正**                                                                         | **更新不要** | なし                                                                                         |
+| 変更の種類                                                                                                           | 判定         | 更新対象ファイル                                                                                   |
+| :------------------------------------------------------------------------------------------------------------------- | :----------- | :------------------------------------------------------------------------------------------------- |
+| **データモデル・アルゴリズム・正規表現の変更**<br>（`models.py`, `liquid_resolver.py`, `path_utils.py` 等）          | **要更新**   | `docs/Detailed_Logic.md`<br>`.agents/skills/github-sync-logic/SKILL.md`                            |
+| **API 制限・フェイルセーフ・トランザクション規約の変更**<br>（`docs_client.py`, `github_client.py` 等）              | **要更新**   | `docs/Detailed_Logic.md`<br>`docs/System_Overview.md`<br>`.agents/skills/docs-tabs-logic/SKILL.md` |
+| **CLI オプション・実行方法・環境変数・依存関係の変更**<br>（`main.py`, `requirements.txt`, `.github/workflows/` 等） | **要更新**   | `README.md`<br>`docs/System_Overview.md`                                                           |
+| **ディレクトリ構成の追加・削除・変更**                                                                               | **要更新**   | `.agents/AGENTS.md`<br>`README.md`                                                                 |
+| **分冊（Doc 2〜8）の有効化・監視パス変更**<br>（`config.yaml` の更新）                                               | **要更新**   | `docs/System_Overview.md`<br>`README.md`                                                           |
+| **既存仕様どおりのバグ修正・内部リファクタリング**                                                                   | **更新不要** | なし                                                                                               |
+| **テストコード（`tests/`）のみの追加・修正**                                                                         | **更新不要** | なし                                                                                               |
 
 ## 2. 更新時の厳守ルール
 
