@@ -148,6 +148,7 @@ class TestFlattenUiTags:
             ("eclipse", "Eclipse"),
             ("vimneovim", "Vim/Neovim"),
             ("webui", "Web browser"),
+            ("copilotcli", "GitHub Copilot CLI"),
             ("mac", "Mac"),
         ],
     )
