@@ -119,3 +119,28 @@ class Phase2Plan:
     google_doc_id: str
     updates: list[Phase2TabUpdate]
 
+
+@dataclass
+class CompareResult:
+    """GitHub Compare API の解析結果"""
+
+    changes: list[FileChange]
+    #: Compare API のファイル数上限（300）に到達し、差分取りこぼしの可能性がある
+    truncated: bool = False
+    #: data/reusables/ または data/variables/ に変更があった（解決後本文が変わり得る）
+    data_changed: bool = False
+
+
+@dataclass
+class DocumentSyncReport:
+    """1 ドキュメント分の同期結果サマリー"""
+
+    google_doc_id: str
+    tabs_created: list[str] = field(default_factory=list)
+    tabs_deleted: list[str] = field(default_factory=list)  # 削除したタブ ID
+    tabs_updated: list[str] = field(default_factory=list)  # 本文を更新したタブ名
+    current_tab_count: int = 0
+    predicted_tab_count: int = 0
+    phase2_chunks_sent: int = 0
+    dry_run: bool = False
+
