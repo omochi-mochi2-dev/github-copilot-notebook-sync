@@ -117,6 +117,7 @@ TOOL_DISPLAY_NAMES: dict[str, str] = {
     "azure_data_studio": "Azure Data Studio",
     "webui": "Web browser",
     "cli": "GitHub CLI",
+    "copilotcli": "GitHub Copilot CLI",
     "desktop": "GitHub Desktop",
     "curl": "cURL",
     "codespaces": "Codespaces",
