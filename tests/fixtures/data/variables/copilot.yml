@@ -1,6 +1,7 @@
 prodname_copilot: GitHub Copilot
 prodname_copilot_short: Copilot
 copilot_chat_short: Copilot Chat
+copilot_qwen_3.8_flash: Qwen 3.8 Flash
 prodname_copilot_cli: '{% data variables.product.prodname_copilot %} CLI'
 level1: '{% data variables.copilot.level2 %}'
 level2: '{% data variables.copilot.level3 %}'

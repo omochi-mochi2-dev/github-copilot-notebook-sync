@@ -189,6 +189,7 @@ class TestFlattenUiTags:
 class TestVariables:
     def test_replace(self, resolver: LiquidResolver) -> None:
         assert resolver.replace_variables("{% data variables.product.prodname_copilot %}") == "GitHub Copilot"
+        assert resolver.replace_variables("{% data variables.copilot.copilot_qwen_3.8_flash %}") == "Qwen 3.8 Flash"
 
     def test_undefined_key_falls_back_to_key_name(
         self, resolver: LiquidResolver, caplog: pytest.LogCaptureFixture

@@ -67,8 +67,8 @@ DECORATION_RE = re.compile(
 )
 OCTICON_RE = re.compile(_OPEN + r"octicon\s+[\"']([^\"']+)[\"'](?:(?!%\}).)*?-?%\}")
 
-# Phase C
-VARIABLE_RE = re.compile(_OPEN + r"data\s+variables\.([\w-]+)\.([\w-]+)" + _CLOSE)
+# Phase C（YAML キー名に `3.8` 等のドットが含まれるケースにも対応）
+VARIABLE_RE = re.compile(_OPEN + r"data\s+variables\.([\w-]+)\.([\w.-]+)" + _CLOSE)
 
 # 最終スイープ（未知の残存タグ）
 ANY_TAG_RE = re.compile(r"\{%-?[\s\S]*?-?%\}")
