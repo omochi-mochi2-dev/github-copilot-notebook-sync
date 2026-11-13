@@ -53,7 +53,16 @@ Google Docs API はドキュメント内に最低 1 つのタブが存在する�
 
 ```text
 ├── .agents/
-│   └── AGENTS.md                  # 本ファイル
+│   ├── AGENTS.md                  # 本ファイル
+│   ├── rules/
+│   │   └── coding_rules.md        # Python コーディング規約
+│   └── skills/
+│       ├── docs-tabs-logic/
+│       │   └── SKILL.md           # Google Docs API タブ操作・Phase 1/Phase 2 同期仕様
+│       ├── github-sync-logic/
+│       │   └── SKILL.md           # GitHub 差分/全量取得・Liquid 3段階解決仕様
+│       └── maintain-project-docs/
+│           └── SKILL.md           # ドキュメント・スキル同期メンテナンス仕様
 ├── .github/
 │   └── workflows/
 │       └── sync.yml               # 日次同期 GitHub Actions ワークフロー
@@ -66,7 +75,8 @@ Google Docs API はドキュメント内に最低 1 つのタブが存在する�
 │   ├── github_client.py           # GitHub Compare API / 内容取得
 │   ├── liquid_resolver.py         # Liquid 構文 3 段階解決エンジン
 │   ├── main.py                    # 同期オーケストレーター
-│   └── models.py                  # データクラス・型定義
+│   ├── models.py                  # データクラス・型定義
+│   └── path_utils.py              # パス判定・フラットタブ命名ユーティリティ
 ├── tests/                         # 単体・結合テスト群
 ├── config.yaml                    # 監視フォルダ・Google Doc ID 定義
 └── requirements.txt               # 依存ライブラリ
