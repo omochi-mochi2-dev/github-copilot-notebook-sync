@@ -21,3 +21,13 @@ sync_targets:
       - source_path: "content/copilot/how-tos/github-agentic-workflows"
         google_doc_id: "1-F0Truw0gwRmsC9S3Budxt_PNqsOcm-bq2dUhnXjd1w"
         doc_name: "[Copilot Docs] 02 - CLI & Terminal Workflows"
+      # Doc 3: Surfaces & Interactive Coding (実測 74 件 / ヘッドルーム 26 件)
+      - source_path: "content/copilot/how-tos/copilot-in-your-ide"
+        google_doc_id: "1FfGniLStZXZjMy2o95oTezJTslgzGtYcTWTiJUA08IU"
+        doc_name: "[Copilot Docs] 03 - Surfaces & Interactive Coding"
+      - source_path: "content/copilot/how-tos/copilot-on-github"
+        google_doc_id: "1FfGniLStZXZjMy2o95oTezJTslgzGtYcTWTiJUA08IU"
+        doc_name: "[Copilot Docs] 03 - Surfaces & Interactive Coding"
+      - source_path: "content/copilot/how-tos/github-copilot-app"
+        google_doc_id: "1FfGniLStZXZjMy2o95oTezJTslgzGtYcTWTiJUA08IU"
+        doc_name: "[Copilot Docs] 03 - Surfaces & Interactive Coding"
