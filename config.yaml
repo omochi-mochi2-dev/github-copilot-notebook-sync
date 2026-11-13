@@ -31,3 +31,13 @@ sync_targets:
       - source_path: "content/copilot/how-tos/github-copilot-app"
         google_doc_id: "1FfGniLStZXZjMy2o95oTezJTslgzGtYcTWTiJUA08IU"
         doc_name: "[Copilot Docs] 03 - Surfaces & Interactive Coding"
+      # Doc 4: Autonomous Agents & SDK (実測 67 件 / ヘッドルーム 33 件)
+      - source_path: "content/copilot/how-tos/copilot-sdk"
+        google_doc_id: "1JcafwoQlo1qZ5nbiDNsDCnAmiyAkuympI8Trd4Wet48"
+        doc_name: "[Copilot Docs] 04 - Autonomous Agents & SDK"
+      - source_path: "content/copilot/how-tos/use-copilot-agents"
+        google_doc_id: "1JcafwoQlo1qZ5nbiDNsDCnAmiyAkuympI8Trd4Wet48"
+        doc_name: "[Copilot Docs] 04 - Autonomous Agents & SDK"
+      - source_path: "content/copilot/how-tos/copilot-integrations"
+        google_doc_id: "1JcafwoQlo1qZ5nbiDNsDCnAmiyAkuympI8Trd4Wet48"
+        doc_name: "[Copilot Docs] 04 - Autonomous Agents & SDK"

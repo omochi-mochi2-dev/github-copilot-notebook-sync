@@ -119,6 +119,7 @@ TOOL_DISPLAY_NAMES: dict[str, str] = {
     "cli": "GitHub CLI",
     "copilotcli": "GitHub Copilot CLI",
     "desktop": "GitHub Desktop",
+    "mobile": "GitHub Mobile",
     "curl": "cURL",
     "codespaces": "Codespaces",
     "mac": "Mac",

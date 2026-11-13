@@ -149,6 +149,7 @@ class TestFlattenUiTags:
             ("vimneovim", "Vim/Neovim"),
             ("webui", "Web browser"),
             ("copilotcli", "GitHub Copilot CLI"),
+            ("mobile", "GitHub Mobile"),
             ("mac", "Mac"),
         ],
     )
