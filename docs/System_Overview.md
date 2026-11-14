@@ -98,4 +98,4 @@ Google Docs API では新規作成される `tabId` が動的に発行される�
 | **Doc 5** | **Enterprise Administration & Security**（稼働中） | `how-tos/administer-copilot/`, `how-tos/cloud-and-local-sandboxes/`, `how-tos/configure-content-exclusion/`, `how-tos/manage-and-track-spending/`, `how-tos/manage-your-account/`, `how-tos/troubleshoot-copilot/` | 61 件 | 39 件 |
 | **Doc 6** | **Cookbook & Customization**（稼働中） | `tutorials/copilot-cookbook/`, `tutorials/customization-library/` | 43 件 | 57 件 |
 | **Doc 7** | **Tutorials, Adoption & Scale**（稼働中） | `tutorials/` 直下, `tutorials/budgets/`, `tutorials/cloud-agent/`, `tutorials/roll-out-at-scale/` | 44 件 | 56 件 |
-| **Doc 8** | **Technical Reference** | `reference/` | 48 件 | 52 件 |
+| **Doc 8** | **Technical Reference**（稼働中） | `reference/` | 48 件 | 52 件 |

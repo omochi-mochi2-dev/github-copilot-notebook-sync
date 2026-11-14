@@ -80,3 +80,7 @@ sync_targets:
       - source_path: "content/copilot/tutorials/roll-out-at-scale"
         google_doc_id: "1fsj-GKJsuCnny2Xq9JPjDNEtF1FnOM9uQoFmR9w6Mxo"
         doc_name: "[Copilot Docs] 07 - Tutorials, Adoption & Scale"
+      # Doc 8: Technical Reference (実測 48 件 / ヘッドルーム 52 件)
+      - source_path: "content/copilot/reference"
+        google_doc_id: "1MM9TJx89CbetbKZwnvZRRiGjzLk7fZ-JXhXDWzhwhCU"
+        doc_name: "[Copilot Docs] 08 - Technical Reference"

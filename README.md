@@ -35,7 +35,7 @@ By partitioning extensive documentation into topic-driven volumes, this system a
 | **Doc 5** | **Enterprise Administration & Security** (Active) | `how-tos/administer-copilot/`, `how-tos/cloud-and-local-sandboxes/`, `how-tos/configure-content-exclusion/`, `how-tos/manage-and-track-spending/`, `how-tos/manage-your-account/`, `how-tos/troubleshoot-copilot/` | 61           |
 | **Doc 6** | **Cookbook & Customization** (Active)          | `tutorials/copilot-cookbook/`, `tutorials/customization-library/`                                                                                                                                                  | 43           |
 | **Doc 7** | **Tutorials, Adoption & Scale** (Active)       | `tutorials/` (root), `tutorials/budgets/`, `tutorials/cloud-agent/`, `tutorials/roll-out-at-scale/`                                                                                                                | 44           |
-| **Doc 8** | **Technical Reference**                        | `reference/`                                                                                                                                                                                                       | 48           |
+| **Doc 8** | **Technical Reference** (Active)               | `reference/`                                                                                                                                                                                                       | 48           |
 
 ---
 
