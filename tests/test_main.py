@@ -114,8 +114,55 @@ class TestScopeChangesToGroup:
         assert [(c.path, c.status) for c in doc1_scoped] == [("content/copilot/concepts/moved.md", "removed")]
         assert [(c.path, c.status) for c in doc2_scoped] == [("content/copilot/reference/moved.md", "added")]
 
+    def test_nested_cross_group_scope_assigns_to_deepest_folder(self) -> None:
+        doc6_folders = ["content/copilot/tutorials/copilot-cookbook"]
+        doc7_folders = ["content/copilot/tutorials", "content/copilot/tutorials/budgets"]
+        all_folders = doc6_folders + doc7_folders
+        changes = [
+            FileChange(path="content/copilot/tutorials/copilot-cookbook/recipe.md", status="modified"),
+            FileChange(path="content/copilot/tutorials/vibe-coding.md", status="modified"),
+            FileChange(path="content/copilot/tutorials/budgets/limit.md", status="added"),
+        ]
+        doc6_scoped = scope_changes_to_group(changes, doc6_folders, all_folders)
+        doc7_scoped = scope_changes_to_group(changes, doc7_folders, all_folders)
+        assert [c.path for c in doc6_scoped] == ["content/copilot/tutorials/copilot-cookbook/recipe.md"]
+        assert [c.path for c in doc7_scoped] == [
+            "content/copilot/tutorials/vibe-coding.md",
+            "content/copilot/tutorials/budgets/limit.md",
+        ]
+
 
 class TestFullAndInitialSync:
+    def test_nested_watch_folders_across_groups_do_not_duplicate_in_full_sync(self, tmp_path: Path) -> None:
+        target = SyncTargetConfig(
+            repository="github/docs",
+            watch_folders=[
+                WatchFolderConfig("content/copilot/tutorials/copilot-cookbook", "DOC6", "Doc 6"),
+                WatchFolderConfig("content/copilot/tutorials", DOC1_ID, "Doc 7"),
+                WatchFolderConfig("content/copilot/tutorials/budgets", DOC1_ID, "Doc 7"),
+            ],
+        )
+        all_tutorial_files = [
+            "content/copilot/tutorials/vibe-coding.md",
+            "content/copilot/tutorials/budgets/limit.md",
+            "content/copilot/tutorials/copilot-cookbook/recipe.md",
+        ]
+        gh = _mock_gh(
+            head_sha="sha_doc7",
+            folder_files={
+                "content/copilot/tutorials": all_tutorial_files,
+                "content/copilot/tutorials/budgets": ["content/copilot/tutorials/budgets/limit.md"],
+                "content/copilot/tutorials/copilot-cookbook": ["content/copilot/tutorials/copilot-cookbook/recipe.md"],
+            },
+        )
+        docs, _ = _mock_docs(
+            before_titles=["タブ 1"],
+            after_titles=["tutorials_vibe-coding_md", "budgets_limit_md"],
+        )
+        reports = sync_target(target, gh, docs, force=True, dry_run=True, doc_id_filter=DOC1_ID, cache_dir=tmp_path, output_dir=tmp_path / "out")
+        assert len(reports) == 1
+        assert reports[0].predicted_tab_count == 2
+        assert reports[0].tabs_created == ["tutorials_vibe-coding_md", "budgets_limit_md"]
     def test_initial_sync_without_cache_runs_full_and_writes_sha(self, tmp_path: Path) -> None:
         gh = _mock_gh(head_sha="sha_new_123456")
         docs, service = _mock_docs(
