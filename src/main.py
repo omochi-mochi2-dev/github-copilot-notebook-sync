@@ -11,7 +11,7 @@ import argparse
 import logging
 import os
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from pathlib import Path
 
 # `python src/main.py` として直接実行された場合でも `src.*` を解決できるようにする
@@ -50,14 +50,20 @@ def write_cached_sha(path: Path, sha: str) -> None:
     path.write_text(f"{sha.strip()}\n", encoding="utf-8")
 
 
-def scope_changes_to_group(changes: list[FileChange], group_folders: list[str]) -> list[FileChange]:
-    """変更一覧を単一 DocumentGroup の監視フォルダ群にスコープする（分冊間リネームにも対応）。"""
+def scope_changes_to_group(
+    changes: list[FileChange],
+    group_folders: list[str],
+    all_watch_folders: Iterable[str] | None = None,
+) -> list[FileChange]:
+    """変更一覧を単一 DocumentGroup の監視フォルダ群にスコープする（分冊間リネーム・包含優先にも対応）。"""
+    group_set = set(group_folders)
+    search_folders = list(all_watch_folders) if all_watch_folders is not None else group_folders
     scoped: list[FileChange] = []
     for change in changes:
-        new_in = find_watch_folder(change.path, group_folders) is not None
+        new_in = find_watch_folder(change.path, search_folders) in group_set
         if change.status == "renamed":
             prev = change.previous_path or ""
-            old_in = bool(prev) and find_watch_folder(prev, group_folders) is not None
+            old_in = bool(prev) and find_watch_folder(prev, search_folders) in group_set
             if new_in and old_in:
                 scoped.append(FileChange(path=change.path, status="renamed", previous_path=prev))
             elif new_in:
@@ -87,12 +93,14 @@ def _collect_full_sync_payload(
     head_sha: str,
     gh_client: GitHubClient,
     resolver: LiquidResolver,
+    all_watch_folders: Iterable[str] | None = None,
 ) -> tuple[dict[str, str], list[str]]:
     """全量同期用にグループ配下の全有効ファイルを取得・Liquid 解決し ({tab_title: body}, []) を返す。"""
+    search_folders = list(all_watch_folders) if all_watch_folders is not None else group.source_paths
     file_paths: list[str] = []
     for wf in group.watch_folders:
         for path in gh_client.list_folder_files(wf.source_path, head_sha):
-            if path not in file_paths:
+            if find_watch_folder(path, search_folders) == wf.source_path and path not in file_paths:
                 file_paths.append(path)
 
     path_to_title: dict[str, str] = {}
@@ -185,11 +193,11 @@ def sync_target(
         logger.info("Repository %s is already up to date at %s.", target.repository, head_sha[:12])
         return []
 
+    all_watch_paths = [wf.source_path for wf in target.watch_folders]
     compare_changes: list[FileChange] = []
     if not effective_force:
         assert base_sha is not None
-        watch_paths = [wf.source_path for g in groups for wf in g.watch_folders]
-        compare_result = gh_client.compare(base_sha, head_sha, watch_paths)
+        compare_result = gh_client.compare(base_sha, head_sha, all_watch_paths)
         if compare_result.truncated or compare_result.data_changed:
             reason = "compare limit reached" if compare_result.truncated else "data/ resources modified"
             logger.info("Falling back to full sync (%s between %s and %s).", reason, base_sha[:12], head_sha[:12])
@@ -210,10 +218,12 @@ def sync_target(
     for group in groups:
         logger.info("Processing %s (%s) [force=%s, dry_run=%s]", group.doc_name, group.google_doc_id, effective_force, dry_run)
         if effective_force:
-            contents, delete_titles = _collect_full_sync_payload(group, head_sha, gh_client, _get_resolver())
+            contents, delete_titles = _collect_full_sync_payload(
+                group, head_sha, gh_client, _get_resolver(), all_watch_paths
+            )
             all_valid_titles: list[str] | None = list(contents.keys())
         else:
-            scoped = scope_changes_to_group(compare_changes, group.source_paths)
+            scoped = scope_changes_to_group(compare_changes, group.source_paths, all_watch_paths)
             if not scoped:
                 logger.info("No changes for %s (%s).", group.doc_name, group.google_doc_id)
                 continue
