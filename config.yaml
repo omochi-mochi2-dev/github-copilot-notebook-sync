@@ -60,3 +60,10 @@ sync_targets:
       - source_path: "content/copilot/how-tos/troubleshoot-copilot"
         google_doc_id: "1T4XH_XzMCPIcZHarRon15ntmhHbAyOifpE3dkSh6ieA"
         doc_name: "[Copilot Docs] 05 - Enterprise Administration & Security"
+      # Doc 6: Cookbook & Customization (実測 43 件 / ヘッドルーム 57 件)
+      - source_path: "content/copilot/tutorials/copilot-cookbook"
+        google_doc_id: "16OyDQjoo6vmOm9seKvZE6XWlQJQeYjVjFxr0vvbrMIk"
+        doc_name: "[Copilot Docs] 06 - Cookbook & Customization"
+      - source_path: "content/copilot/tutorials/customization-library"
+        google_doc_id: "16OyDQjoo6vmOm9seKvZE6XWlQJQeYjVjFxr0vvbrMIk"
+        doc_name: "[Copilot Docs] 06 - Cookbook & Customization"
