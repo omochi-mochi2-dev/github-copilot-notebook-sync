@@ -10,7 +10,7 @@
 
 ## 2. システムアーキテクチャ方針
 
-- **実行環境**: GitHub Actions（スケジュールトリガーによる日次実行 `0 0 * * *`、および `workflow_dispatch` による手動強制同期 `--force` 対応）
+- **実行環境**: GitHub Actions（スケジュールトリガーによる日次実行 `17 2 * * *`（02:17 UTC / 11:17 JST）、および `workflow_dispatch` による手動強制同期 `--force` 対応）
 - **差分検出**: `actions/cache` を用いて前回の同期コミット SHA（`last_commit_sha_{owner}_{repo}.txt`）を永続化し、GitHub Compare API で差分ファイルのみを抽出するステートフル同期
 - **ターゲット構成**: 1 つの監視対象クラスタ（複数の関連フォルダ）に対して 1 つの Google ドキュメントを割り当て、配下の Markdown ファイルを第一階層のタブ（Tabs）として同期
 
